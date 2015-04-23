@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<script>
+    function DI(){
+
+        this.dependencies = {};
+       /* Object.defineProperty(this, 'dependencies',{
+            get: function(){
+                return this;
+            }
+        });
+        this.register = function(name, obj){
+            dependencies[name] = obj;
+        };*/
+    };
+
+    DI.prototype.register = function(name, obj){
+        this.dependencies[name] = obj;
+    };
+
+    DI.prototype.resolve = function(){
+        var self = this;
+        /*
+        console.log(arguments);
+       // console.log(arguments[0].toString().substring(14,17));
+        var found = arguments[0].toString().match('car');
+        console.log(found);
+        if(found in this.dependencies){
+
+        }*/
+
+        var args = Array.prototype.slice.call(arguments);
+        var fn = args.shift();//first param a function to be invoked
+
+        //resolve parameters
+
+        var params = getNamedParameters(fn);
+        //console.log(params);
+      /*  var fn_args = params.map(function (param) {
+           return param in self.dependencies ? self.dependencies[param] : args.shift();
+        });
+
+        fn.apply(null, fn_args);*/
+
+    };
+
+    function getNamedParameters(functionName){
+
+        var args = functionName.toString();
+       // console.log(args);
+        var re = /^\s?function\s[^(]+\(/i;
+        var args = args.match(re);
+        console.log(args);
+
+        /*return args.toString().match(/^\s?function\s[^(]+\(([^)]+)/i)[1]
+                .split(',').map(function (param) { return param.trim(); });*/
+            // you can replace the split
+            // and the trim with a regular expression in the base.
+    };
+
+    function test(car , v){
+        console.log(car);
+        console.log(v);
+    }
+
+    //Invocation
+    var di = new DI();
+
+    di.register('car',{make:'Honda'});
+
+    di.resolve(test,8);
+
+</script>
+</body>
+</html>

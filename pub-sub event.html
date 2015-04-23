@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script>
+    var Publisher =  function(){
+        this.events = {};
+        this.events.stop = new CustomEvent('stop', {
+            detail:{
+                hello: true
+            }
+        });
+    };
+
+    var div = document.createElement('div');
+    //Publisher.prototype = Object.create(document.createElement('div'));
+
+//    console.log(Publisher.prototype);
+
+    Publisher.prototype.publish =function(eventName){
+        div.dispatchEvent(this.events[eventName]);
+    };
+
+    var Subscriber =  function(){
+
+    };
+
+    Subscriber.prototype.subscribe = function(publisher, eventName, functionName){
+        /*if(publisher){
+            if(eventName in publisher.events) publisher.events[eventName].push(functionName);
+        }*/
+        div.addEventListener(eventName, functionName);
+    };
+
+    var user = new Publisher();
+    var engine = new Subscriber();
+    var brakes = new Subscriber();
+    var brakeLight = new Subscriber();
+
+    //console.log(document.createElement('div'));
+    Publisher.prototype = Object.create(document.createElement('div'));
+
+    engine.subscribe(user, 'stop', function(){
+        console.log('Engine stopping car..');
+    });
+
+    brakes.subscribe(user,'stop',function(){
+        console.log('Brakes applied ..');
+    });
+
+    brakeLight.subscribe(user,'stop',function(){
+        console.log('Brake Lights on ..');
+    });
+
+    user.publish('stop');
+
+</script>
+</body>
+</html>

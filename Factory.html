@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script>
+    var CarFactory = (function(){
+
+        function CarFactory(constr) {
+            return new CarFactory.constructors[constr]();
+        };
+
+        CarFactory.constructors = {
+            'Car' : function(){
+
+            },
+            'Audi':function(){
+                this.make = 'Audi';
+            },
+            'Toyota':function(){
+                this.make = 'Toyota';
+            },
+            'Nissan':function(){
+                this.make = 'Nissan'
+            }
+        };
+
+        var Car = CarFactory.constructors['Car'];
+        Car.prototype.drive = function(){
+            console.log('Vroom...');
+        };
+
+        for (var prop in CarFactory.constructors) {
+            if (prop !== 'Car') {
+                CarFactory.constructors[prop].prototype = new Car();
+                CarFactory.constructors[prop].prototype.constructor = CarFactory.constructors[prop];
+            }
+        }
+        return CarFactory;
+    })();
+
+    var audi = CarFactory('Audi');
+    console.log(audi.make);
+    audi.drive();
+
+    CarFactory('Audi');
+</script>
+</body>
+</html>
